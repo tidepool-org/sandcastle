@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/tidepool-org/sandcastle/issues"
   },
-  "homepage": "https://github.com/tidepool-org/sandcastle"
+  "homepage": "https://github.com/tidepool-org/sandcastle",
+  "dependencies": {
+    "restify-git-json": "git://github.com/tidepool-org/restify-git-json.git"
+  }
 }
