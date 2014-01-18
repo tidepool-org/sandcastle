@@ -330,11 +330,78 @@ Once a user is created you can upload stuff.
 ```
 
 ##### Fetch content
+Performing an upload with valid mime types.
+You can specify author.name, author.email, committer.name, and
+committer.email, as well as the `message`.
+The json response will include urls in the `content` which can be used
+to `GET` the content.
 ```bash
-+ curl -ivs http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-69216887/cfe18c/trailing-500.txt http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-69216887/cfe18c/env.js
++ json
++ curl -ivs -F web=@server.js -F two=@env.js 'localhost:9999/repos/bewest/uploads/upload?message=upload+stuff'
 * About to connect() to localhost port 9999 (#0)
 *   Trying 127.0.0.1... connected
-> GET /repos/bewest/uploads/raw/upload/incoming/2014-01-18-69216887/cfe18c/trailing-500.txt HTTP/1.1
+> POST /repos/bewest/uploads/upload?message=upload+stuff HTTP/1.1
+> User-Agent: curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
+> Host: localhost:9999
+> Accept: */*
+> Content-Length: 1754
+> Expect: 100-continue
+> Content-Type: multipart/form-data; boundary=----------------------------99b0b82471bc
+> 
+< HTTP/1.1 100 Continue
+} [data not shown]
+< HTTP/1.1 201 Created
+< Connection: close
+< Content-Type: application/json
+< Content-Length: 911
+< Date: Sat, 18 Jan 2014 04:23:52 GMT
+< 
+{ [data not shown]
+* Closing connection #0
+```
+```javascript
+{
+  "err": null,
+  "body": [
+    {
+      "ref": "upload/incoming/2014-01-18-73432385/1769bd",
+      "sha": "1769bd5b998dbf3af70a0743bc707a4583b53c6b",
+      "head": {
+        "commit": "1769bd5b998dbf3af70a0743bc707a4583b53c6b",
+        "tree": {
+          "tree": "aaff24e65cfd1acac70cb7670a6bd95711defadc",
+          "author": {
+            "name": "bewest",
+            "email": "bewest@tidepool.io"
+          },
+          "committer": {
+            "name": "bewest",
+            "email": "bewest@tidepool.io"
+          },
+          "message": "upload stuff",
+          "url": "http://localhost:9999/repos/bewest/uploads/git/trees/aaff24e65cfd1acac70cb7670a6bd95711defadc"
+        },
+        "url": "http://localhost:9999/repos/bewest/uploads/git/commits/1769bd5b998dbf3af70a0743bc707a4583b53c6b"
+      },
+      "content": [
+        "http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/server.js",
+        "http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/env.js"
+      ],
+      "url": "http://localhost:9999/repos/bewest/uploads/git/refs/heads/upload/incoming/2014-01-18-73432385/1769bd"
+    }
+  ]
+}
+```
+
+Use the content links to fetch content.
+
+##### Download `content` links
+
+```bash
++ curl -ivs http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/server.js
+* About to connect() to localhost port 9999 (#0)
+*   Trying 127.0.0.1... connected
+> GET /repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/server.js HTTP/1.1
 > User-Agent: curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
 > Host: localhost:9999
 > Accept: */*
@@ -342,30 +409,64 @@ Once a user is created you can upload stuff.
 < HTTP/1.1 200 OK
 < Connection: close
 < Content-Type: text/plain
-< Content-Length: 23584
-< Date: Sat, 18 Jan 2014 03:16:48 GMT
+< Content-Length: 838
+< Date: Sat, 18 Jan 2014 04:28:45 GMT
 < 
 { [data not shown]
+* Closing connection #0
 HTTP/1.1 200 OK
 Connection: close
 Content-Type: text/plain
-Content-Length: 23584
-Date: Sat, 18 Jan 2014 03:16:48 GMT
+Content-Length: 838
+Date: Sat, 18 Jan 2014 04:28:45 GMT
 
-2011-03-09T08:38:01	242
-2011-03-08T21:34:27	126
-2011-03-08T19:30:37	94
-2011-03-08T18:29:12	91
-[ EDITED ]
-2011-01-26T16:17:33	184
-2011-01-26T15:46:49	156
-2011-01-26T14:52:11	161
-2011-01-26T13:42:33	78
-2011-01-26T13:22:50	66
-2011-01-* Closing connection #0
+```
+```javascript
+
+var gitServer = require('restify-git-json/server');
+
+function customUser (profile, next) {
+  // customize description
+  // actually you can replace the entire thing, supports async fetching.
+  profile.description = "Hello world!";
+  // what ever is passed to next will be the result of server.fetchUser(name, cb)
+  next(null, profile);
+}
+
+function configure (hook, next) {
+  hook.map(customUser);
+  next( );
+}
+
+function createServer( ) {
+  var env = require('./env');
+  var server = gitServer(env);
+
+  server.events.on('profile', configure);
+  return server;
+}
+
+module.exports = createServer;
+
+if (!module.parent) {
+  console.log('main');
+  var server = createServer( );
+
+  var env = require('./env');
+  var port = env.port || 6886;
+  server.listen(port, function( ) {
+    console.log('listening on', server.name, server.url);
+  });
+
+}
+
+```
+
+```bash
++ curl -ivs http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/env.js
 * About to connect() to localhost port 9999 (#0)
 *   Trying 127.0.0.1... connected
-> GET /repos/bewest/uploads/raw/upload/incoming/2014-01-18-69216887/cfe18c/env.js HTTP/1.1
+> GET /repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/env.js HTTP/1.1
 > User-Agent: curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
 > Host: localhost:9999
 > Accept: */*
@@ -374,30 +475,18 @@ Date: Sat, 18 Jan 2014 03:16:48 GMT
 < Connection: close
 < Content-Type: text/plain
 < Content-Length: 565
-< Date: Sat, 18 Jan 2014 03:16:48 GMT
+< Date: Sat, 18 Jan 2014 04:28:54 GMT
 < 
 { [data not shown]
 * Closing connection #0
-26T13:15:35	55
-2011-01-26T13:11:21	50
-2011-01-26T13:06:37	53
-2011-01-26T12:55:50	65
-2011-01-26T12:47:59	80
-2011-01-26T10:06:44	156
-2011-01-26T09:21:37	152
-2011-01-26T08:32:52	154
-[ EDITED ]
-2011-01-13T20:19:17	92
-2011-01-13T18:29:58	85
-2011-01-13T16:32:17	68
-2011-01-13T15:42:08	108
-2011-01-13T14:30:45	139
 HTTP/1.1 200 OK
 Connection: close
 Content-Type: text/plain
 Content-Length: 565
-Date: Sat, 18 Jan 2014 03:16:48 GMT
+Date: Sat, 18 Jan 2014 04:28:54 GMT
 
+```
+```javascript
 module.exports = (function ( ) {
   var config = {
       // port for http server to bind to
@@ -417,7 +506,6 @@ module.exports = (function ( ) {
   return config;
 })( );
 ```
-
 
 #### Get list of uploads
 ```bash
