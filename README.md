@@ -271,6 +271,15 @@ Now POST
 }
 ```
 
+
+##### Fetch content
+Performing an upload with valid mime types.
+You can specify author.name, author.email, committer.name, and
+committer.email, as well as the `message`.
+The json response will include urls in the `content` which can be used
+to `GET` the content.
+
+Use the content links to fetch content.
 ##### Track an upload
 Once a user is created you can upload stuff.
 ```bash
@@ -329,72 +338,6 @@ Once a user is created you can upload stuff.
 }
 ```
 
-##### Fetch content
-Performing an upload with valid mime types.
-You can specify author.name, author.email, committer.name, and
-committer.email, as well as the `message`.
-The json response will include urls in the `content` which can be used
-to `GET` the content.
-```bash
-+ json
-+ curl -ivs -F web=@server.js -F two=@env.js 'localhost:9999/repos/bewest/uploads/upload?message=upload+stuff'
-* About to connect() to localhost port 9999 (#0)
-*   Trying 127.0.0.1... connected
-> POST /repos/bewest/uploads/upload?message=upload+stuff HTTP/1.1
-> User-Agent: curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3
-> Host: localhost:9999
-> Accept: */*
-> Content-Length: 1754
-> Expect: 100-continue
-> Content-Type: multipart/form-data; boundary=----------------------------99b0b82471bc
-> 
-< HTTP/1.1 100 Continue
-} [data not shown]
-< HTTP/1.1 201 Created
-< Connection: close
-< Content-Type: application/json
-< Content-Length: 911
-< Date: Sat, 18 Jan 2014 04:23:52 GMT
-< 
-{ [data not shown]
-* Closing connection #0
-```
-```javascript
-{
-  "err": null,
-  "body": [
-    {
-      "ref": "upload/incoming/2014-01-18-73432385/1769bd",
-      "sha": "1769bd5b998dbf3af70a0743bc707a4583b53c6b",
-      "head": {
-        "commit": "1769bd5b998dbf3af70a0743bc707a4583b53c6b",
-        "tree": {
-          "tree": "aaff24e65cfd1acac70cb7670a6bd95711defadc",
-          "author": {
-            "name": "bewest",
-            "email": "bewest@tidepool.io"
-          },
-          "committer": {
-            "name": "bewest",
-            "email": "bewest@tidepool.io"
-          },
-          "message": "upload stuff",
-          "url": "http://localhost:9999/repos/bewest/uploads/git/trees/aaff24e65cfd1acac70cb7670a6bd95711defadc"
-        },
-        "url": "http://localhost:9999/repos/bewest/uploads/git/commits/1769bd5b998dbf3af70a0743bc707a4583b53c6b"
-      },
-      "content": [
-        "http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/server.js",
-        "http://localhost:9999/repos/bewest/uploads/raw/upload/incoming/2014-01-18-73432385/1769bd/env.js"
-      ],
-      "url": "http://localhost:9999/repos/bewest/uploads/git/refs/heads/upload/incoming/2014-01-18-73432385/1769bd"
-    }
-  ]
-}
-```
-
-Use the content links to fetch content.
-
 ##### Download `content` links
 
 ```bash
@@ -421,6 +364,7 @@ Content-Length: 838
 Date: Sat, 18 Jan 2014 04:28:45 GMT
 
 ```
+
 ```javascript
 
 var gitServer = require('restify-git-json/server');
