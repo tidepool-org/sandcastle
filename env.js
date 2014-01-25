@@ -5,6 +5,10 @@ module.exports = (function ( ) {
       port: (process.env.PORT || 6776)
       // type of git backend to use
     , type: 'fs-db'
+    , coordinator: (process.env.COORDINATOR || null)
+    , service: (process.env.HAKKEN_PUBLISH || null)
+    , host: (process.env.SANDBOX_HOSTNAME || null)
+    , scheme: (process.env.SANDBOX_SCHEME || null)
       // base directory to host bare repos in
     , base: (process.env.BASE || './out')
   };

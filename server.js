@@ -1,5 +1,6 @@
 
 var gitServer = require('restify-git-json/server');
+var Hakken = require('./lib/hakken');
 
 function customUser (profile, next) {
   // customize description
@@ -9,16 +10,22 @@ function customUser (profile, next) {
   next(null, profile);
 }
 
-function configure (hook, next) {
+function customProfile (hook, next) {
   hook.map(customUser);
   next( );
 }
 
-function createServer( ) {
+function createServer(opts) {
   var env = require('./env');
-  var server = gitServer(env);
+  var server = gitServer(opts);
 
-  server.events.on('profile', configure);
+  var hakken = Hakken(env, server);
+  server.events.on('profile', customProfile);
+  server.on('connection', function config ( ) {
+    console.log('config more');
+    hakken(opts, server);
+
+  });
   return server;
 }
 
@@ -26,9 +33,9 @@ module.exports = createServer;
 
 if (!module.parent) {
   console.log('main');
-  var server = createServer( );
 
   var env = require('./env');
+  var server = createServer(env);
   var port = env.port || 6886;
   server.listen(port, function( ) {
     console.log('listening on', server.name, server.url);

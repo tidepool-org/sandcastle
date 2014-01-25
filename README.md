@@ -32,6 +32,14 @@ See `env.js` for all environment variable handling.
 * **PORT** - required
 * **BASE** - where to host "bare" git repos.
 
+#### optional
+* **COORDINATOR** - hakken coordinator to use - default is `localhost`
+* **HAKKEN_PUBLISH** - hakken service name to publish, default is
+  `sandbox`
+* **SANDBOX_HOSTNAME** - default hostname to use (`localhost`)
+* **SANDBOX_SCHEME** - default scheme to use (whatever the server is
+  using otherwise)
+
 #### SSL
 
 Set these environment variables.
