@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/tidepool-org/sandcastle",
   "dependencies": {
-    "restify-git-json": "0.0.4",
+    "restify-git-json": "0.0.5",
     "hakken": "0.0.9",
     "nurlize": "~0.1.5"
   },
