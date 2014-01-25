@@ -1,6 +1,6 @@
 {
   "name": "sandcastle",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Tidepool Project's upload tracking server.",
   "main": "server.js",
   "scripts": {
@@ -17,7 +17,9 @@
   ],
   "config": {
     "blanket": {
-      "data-cover-never": [ "node_modules" ],
+      "data-cover-never": [
+        "node_modules"
+      ],
       "pattern": [
         "lib/upload",
         "server",
@@ -32,7 +34,7 @@
   },
   "homepage": "https://github.com/tidepool-org/sandcastle",
   "dependencies": {
-    "restify-git-json": "0.0.4",
+    "restify-git-json": "0.0.5",
     "hakken": "0.0.9",
     "nurlize": "~0.1.5"
   },
