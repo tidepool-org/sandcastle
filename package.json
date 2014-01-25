@@ -15,6 +15,16 @@
     "upload",
     "tracker"
   ],
+  "config": {
+    "blanket": {
+      "data-cover-never": [ "node_modules" ],
+      "pattern": [
+        "lib/upload",
+        "server",
+        "env"
+      ]
+    }
+  },
   "author": "Ben West",
   "license": "BSD-2",
   "bugs": {
