@@ -21,7 +21,7 @@ function createServer(opts) {
 
   var hakken = Hakken(env, server);
   server.events.on('profile', customProfile);
-  server.on('connection', function config ( ) {
+  server.on('listening', function config ( ) {
     console.log('config more');
     hakken(opts, server);
 
