@@ -10,6 +10,9 @@ Tidepool's server for tracking provenance of all "uploads."
     # or
     git clone git://github.com/tidepool-org/sandcastle.git
 
+[![Build Status](https://travis-ci.org/tidepool-org/sandcastle.png?branch=master)](https://travis-ci.org/tidepool-org/sandcastle)
+[![Code Climate](https://codeclimate.com/github/tidepool-org/sandcastle.png)](https://codeclimate.com/github/tidepool-org/sandcastle)
+
 ## Run
 ```bash
 + cat .example_env
