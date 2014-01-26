@@ -11,6 +11,8 @@ module.exports = (function ( ) {
     , scheme: (process.env.SANDBOX_SCHEME || null)
       // base directory to host bare repos in
     , base: (process.env.BASE || './out')
+    , log_level: (process.env.LOG_LEVEL || 'info')
+    , log_stream: (process.env.LOG_STREAM || process.stderr)
   };
   if (process.env.SERVER_KEY && process.env.SERVER_CERTIFICATE) {
     config.key = process.env.SERVER_KEY;

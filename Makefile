@@ -27,7 +27,10 @@ precover: clean
 	make clean
 	./node_modules/.bin/mocha ${BLANKET} ${SHOULD} -R html-cov test/*.js | w3m -T text/html
 
-test: clean
+logs:
+	mkdir logs
+
+test: clean logs
 	make clean
 	mocha --verbose --require should -R tap test/*.js
 

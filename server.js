@@ -1,7 +1,5 @@
 
 var gitServer = require('restify-git-json/server');
-var Hakken = require('./lib/hakken');
-var Uploads = require('./lib/uploads');
 
 function customUser (profile, next) {
   // customize description
@@ -17,14 +15,14 @@ function customProfile (hook, next) {
 }
 
 function createServer(opts) {
-  var env = require('./env');
   var server = gitServer(opts);
-
+  var Hakken = require('./lib/hakken');
+  var Uploads = require('./lib/uploads');
   var uploads = Uploads(opts, server);
-  var hakken = Hakken(env, server);
+  var hakken = Hakken(opts, server);
+
   server.events.on('profile', customProfile);
   server.on('listening', function config ( ) {
-    console.log('config more');
     hakken(opts, server);
     uploads.mount(server, opts);
 
@@ -35,13 +33,13 @@ function createServer(opts) {
 module.exports = createServer;
 
 if (!module.parent) {
-  console.log('main');
 
   var env = require('./env');
   var server = createServer(env);
   var port = env.port || 6886;
   server.listen(port, function( ) {
-    console.log('listening on', server.name, server.url);
+    console.log(server.name, 'listening on', server.url);
+    server.log.info(server.name, 'listening on', server.urlize( ).toString( ));
   });
 
 }

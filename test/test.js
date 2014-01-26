@@ -43,6 +43,9 @@ describe("restify-git-json server", function ( ) {
   var opts = {
     base: './out'
   , socketPath: '/tmp/test-sandcastle-git-json.sock'
+  , log_level: 'debug'
+  , log_stream: 'rotating-file'
+  , log_path: './logs/test.log'
   };
   this.profile = { };
   after(function (done) {
@@ -95,9 +98,14 @@ function uploadContent (name, content, fn) {
   }
   it('should upload stuff', function (done) {
     
-    uploadContent('fooTestUser', null, function (err, body) {
-       console.log("HELP", arguments);
-      // body.length.should.be.above(1);
+    uploadContent('fooTestUser', null, function (err, result) {
+      result.body.should.be.ok;
+      result.body.ref.should.be.ok;
+      result.body.sha.should.be.ok;
+      result.body.head.should.be.ok;
+      result.body.url.should.be.ok;
+      result.body.content.should.be.ok;
+      result.body.content.length.should.equal(2);
       done( );
     });
   });
