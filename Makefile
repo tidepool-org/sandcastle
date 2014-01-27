@@ -32,7 +32,7 @@ logs:
 
 test: clean logs
 	make clean
-	mocha --verbose --require should -R tap test/*.js
+	NODE_ENV=test node_modules/.bin/mocha --verbose --require should -R tap test/*.js
 
 travis: clean test travis-cov coveralls coverhtml
 
