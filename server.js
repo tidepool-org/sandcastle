@@ -15,6 +15,7 @@ function customProfile (hook, next) {
 }
 
 function createServer(opts) {
+  opts.name = opts.name || 'jellyfish';
   var server = gitServer(opts);
   var Hakken = require('./lib/hakken');
   var Uploads = require('./lib/uploads');

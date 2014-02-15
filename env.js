@@ -1,8 +1,8 @@
 module.exports = (function ( ) {
   var config = {
       // port for http server to bind to
-      // port 6776 if undefined
-      port: (process.env.PORT || 6776)
+      // port null if not defined
+      port: (process.env.PORT || null)
       // type of git backend to use
     , type: 'fs-db'
     , coordinator: (process.env.COORDINATOR || null)
