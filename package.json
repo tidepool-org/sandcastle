@@ -1,6 +1,6 @@
 {
   "name": "sandcastle",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Tidepool Project's upload tracking server.",
   "main": "server.js",
   "scripts": {
