@@ -1,6 +1,7 @@
-Sync tags
 
-v0.0.3 / 2014-01-27
+v0.0.4 / 2014-02-19
 ==================
 
- * 0.0.2
+ * update restify dependency
+ * tweak server name, affects log output
+ * Update use of hakken
