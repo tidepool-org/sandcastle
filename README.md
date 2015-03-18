@@ -1,11 +1,11 @@
+# DEPRECATED 
+
+sandcastle is no longer used
+
 sandcastle
 ==========
 
 Tidepool's server for tracking provenance of all "uploads."
-
-# [DEPRECATED] 
-
-sandcastle is no longer used
 
 
 ## Install
