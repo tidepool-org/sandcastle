@@ -3,6 +3,11 @@ sandcastle
 
 Tidepool's server for tracking provenance of all "uploads."
 
+# [DEPRECATED] 
+
+sandcastle is no longer used
+
+
 ## Install
 
     "url": "git://github.com/tidepool-org/sandcastle.git"
